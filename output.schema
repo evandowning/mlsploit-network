@@ -1,0 +1,22 @@
+{
+    "function": [
+        {
+            "name": "payl",
+            "option_tags": [
+                {"tag_name": "return_value", "type": "int"}
+            ]
+        },
+        {
+            "name": "evaluate_payl",
+            "option_tags": [
+                {"tag_name": "return_value", "type": "int"}
+            ]
+        },
+        {
+            "name": "polymorphic_blending_attack",
+            "option_tags":[
+                {"tag_name": "return_value", "type": "int"}
+            ]
+        }
+    ]
+}

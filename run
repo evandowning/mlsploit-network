@@ -1,0 +1,218 @@
+#!/bin/bash
+set -x
+
+END="============================================="
+
+INPUT="/mnt/input"
+OUTPUT="/mnt/output"
+RAW="/mnt/malwarelab/pcap"
+
+CONFIG="$INPUT/input.json"
+LOG_NAME="network-log.txt"
+LOG_ERR_NAME="network-log-err.txt"
+LOG="$OUTPUT/$LOG_NAME"
+LOG_ERR="$OUTPUT/$LOG_ERR_NAME"
+
+NAME=$( jq -r ".name" "$CONFIG" )
+
+echo "Started: `date +%s`" > $LOG
+echo "" > $LOG_ERR
+
+echo "Running $NAME" >> $LOG
+
+# PAYL
+if [ "$NAME" = "payl" ]; then
+    # Get pcap filenames
+    INPUT_FILE=$( jq -r ".files"[0] "$CONFIG" )
+    SAMPLE="$INPUT_FILE"
+
+    TYPE=$( jq -r ".option.type" "$CONFIG" )
+    SMOOTHING=$( jq -r ".option.smoothing_factor" "$CONFIG" )
+    THRESHOLD=$( jq -r ".option.threshold" "$CONFIG" )
+
+    mkdir "$INPUT/model/"
+
+    MODEL="$INPUT/model/model.pkl"
+    FEATURE="network_${TYPE}_features.pkl"
+
+    PAYL_CONFIG="/app/payl/payl.cfg"
+
+    touch "$PAYL_CONFIG"
+    rm "$PAYL_CONFIG"
+
+    echo "[general]" >> "$PAYL_CONFIG"
+    echo "feature=$FEATURE" >> "$PAYL_CONFIG"
+    echo "model=$MODEL" >> "$PAYL_CONFIG"
+
+    echo "[payl]" >> "$PAYL_CONFIG"
+    echo "type=$TYPE" >> "$PAYL_CONFIG"
+    echo "smoothing_factor=$SMOOTHING" >> "$PAYL_CONFIG"
+    echo "threshold=$THRESHOLD" >> "$PAYL_CONFIG"
+
+    cd /app/payl/
+
+    # Extract features
+    echo "Extracting features" >> $LOG
+    echo "Extracting features" >> $LOG_ERR
+    echo "Start Timestamp: `date +%s`" >> $LOG
+    python2.7 preprocess.py "$RAW" "$INPUT/$SAMPLE" "$FEATURE" >> $LOG 2>> $LOG_ERR
+    echo "End Timestamp: `date +%s`" >> $LOG
+    echo $END >> $LOG
+    echo $END >> $LOG_ERR
+
+    # Run PAYL
+    echo "Running PAYL" >> $LOG
+    echo "Running PAYL" >> $LOG_ERR
+    echo "Start Timestamp: `date +%s`" >> $LOG
+    python2.7 payl.py "$PAYL_CONFIG" >> $LOG 2>> $LOG_ERR
+    echo "End Timestamp: `date +%s`" >> $LOG
+    echo $END >> $LOG
+    echo $END >> $LOG_ERR
+
+    echo $END >> $LOG
+
+    # Compress models and move them to output folder
+    cd "$INPUT"
+    zip -r "$OUTPUT/model.zip" "./model/"
+    cd /app/
+
+    # Write output.json
+    echo '{
+    "name": "payl",
+    "files": [null],
+    "status": [null],
+    "results": [null],
+    "model": "model.zip",
+    "files_etc": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","model.zip"]
+}' > "$OUTPUT/output.json"
+fi
+
+# EVALUATE_PAYL
+if [ "$NAME" = "evaluate_payl" ]; then
+    # Get hashes and labels
+    INPUT_FILE=$( jq -r ".files"[0] "$CONFIG" )
+    SAMPLE="$INPUT_FILE"
+
+    # Get model(s)
+    MODEL_ZIP=$( jq -r ".model" "$CONFIG" )
+    OLD_NAME=$( zipinfo -1 "$INPUT/$MODEL_ZIP" | head -1 | awk '{split($NF,a,"/");print a[1]}' )
+    MODEL="model"
+
+    # Unzip models
+    cd "$INPUT"
+    unzip "$MODEL_ZIP"
+    mv $OLD_NAME $MODEL
+    cd /app/
+
+    SMOOTHING=$( jq -r ".option.smoothing_factor" "$CONFIG" )
+    THRESHOLD=$( jq -r ".option.threshold" "$CONFIG" )
+
+    FEATURE="network_features.pkl"
+
+    cd /app/payl/
+
+    # Extract features
+    echo "Extracting features" >> $LOG
+    echo "Extracting features" >> $LOG_ERR
+    echo "Start Timestamp: `date +%s`" >> $LOG
+    python2.7 preprocess.py "$RAW" "$INPUT/$SAMPLE" "$FEATURE" >> $LOG 2>> $LOG_ERR
+    echo "End Timestamp: `date +%s`" >> $LOG
+    echo $END >> $LOG
+    echo $END >> $LOG_ERR
+
+    # Evaluate model
+    echo "Evaluating model" >> $LOG
+    echo "Evaluating model" >> $LOG_ERR
+    echo "Start Timestamp: `date +%s`" >> $LOG
+    python2.7 evaluation.py "$INPUT/$MODEL/model.pkl" "$FEATURE" "$SMOOTHING" "$THRESHOLD" >> $LOG 2>> $LOG_ERR
+    echo "End Timestamp: `date +%s`" >> $LOG
+    echo $END >> $LOG
+    echo $END >> $LOG_ERR
+
+    # Write output.json
+    echo '{
+    "name": "evaluate_payl",
+    "files": [null],
+    "status": [null],
+    "results": [null],
+    "model": null,
+    "files_etc": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'"]
+}' > "$OUTPUT/output.json"
+fi
+
+#PBA
+if [ "$NAME" = "polymorphic_blending_attack" ]; then
+    ARTIFICIAL=$( jq -r ".option.artificial" "$CONFIG" )
+    ATTACK=$( jq -r ".option.attack" "$CONFIG" )
+
+    SMOOTHING=$( jq -r ".option.smoothing_factor" "$CONFIG" )
+    THRESHOLD=$( jq -r ".option.threshold" "$CONFIG" )
+
+    # Get model(s)
+    MODEL_ZIP=$( jq -r ".model" "$CONFIG" )
+    OLD_NAME=$( zipinfo -1 "$INPUT/$MODEL_ZIP" | head -1 | awk '{split($NF,a,"/");print a[1]}' )
+    MODEL="model"
+
+    # Unzip models
+    cd "$INPUT"
+    unzip "$MODEL_ZIP"
+    mv $OLD_NAME $MODEL
+    cd /app/
+
+    PBA_CONFIG="/app/pba/pba.cfg"
+
+    FEATURE="$OUTPUT/blended_features.pkl"
+
+    touch "$PBA_CONFIG"
+    rm "$PBA_CONFIG"
+
+    echo "[pba]" >> "$PBA_CONFIG"
+    echo "artificial_payload=$RAW/$ARTIFICIAL" >> "$PBA_CONFIG"
+    echo "attack_payload=$RAW/$ATTACK" >> "$PBA_CONFIG"
+    echo "output_payload=$FEATURE" >> "$PBA_CONFIG"
+
+    cd /app/pba/
+
+    # Run PBA
+    echo "Running polymorphic_blending_attack" >> $LOG
+    echo "Running polymorphic_blending_attack" >> $LOG_ERR
+    echo "Start Timestamp: `date +%s`" >> $LOG
+    python2.7 pba.py "$PBA_CONFIG" >> $LOG 2>> $LOG_ERR
+    cd ..
+    echo "End Timestamp: `date +%s`" >> $LOG
+    echo $END >> $LOG
+    echo $END >> $LOG_ERR
+
+    cd /app/payl
+
+    # Evaluate model
+    echo "Evaluating model on blended attack" >> $LOG
+    echo "Evaluating model on blended attack" >> $LOG_ERR
+    echo "Start Timestamp: `date +%s`" >> $LOG
+    python2.7 evaluation.py "$INPUT/$MODEL/model.pkl" "$FEATURE" "$SMOOTHING" "$THRESHOLD" >> $LOG 2>> $LOG_ERR
+    echo "End Timestamp: `date +%s`" >> $LOG
+    echo $END >> $LOG
+    echo $END >> $LOG_ERR
+
+    echo $END >> $LOG
+
+    # Compress blended feature and move to output folder
+    cd "$INPUT"
+    mkdir "./features"
+    mv "$FEATURE" "./features/"
+    zip -r "$OUTPUT/features.zip" "./features/"
+    cd /app/
+
+    # Write output.json
+    echo '{
+    "name": "polymorphic_blending_attack",
+    "files": [null],
+    "status": [null],
+    "results": [null],
+    "model": null,
+    "files_etc": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","features.zip"]
+}' > "$OUTPUT/output.json"
+fi
+
+
+echo "Finished: `date +%s`" >> $LOG

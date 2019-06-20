@@ -1,0 +1,37 @@
+{
+    "function":[
+        {
+           "name": "payl",
+            "option":
+                [
+                    {"name": "type", "type": "str", "required": true},
+                    {"name": "smoothing_factor", "type": "float", "required": true},
+                    {"name": "threshold", "type": "float", "required": true}
+                ],
+            "mtype": "pcap",
+            "ftype": null
+        },
+        {
+           "name": "evaluate_payl",
+            "option":
+                [
+                    {"name": "smoothing_factor", "type": "float", "required": true},
+                    {"name": "threshold", "type": "float", "required": true}
+                ],
+            "mtype": "pcap",
+            "ftype": null
+        },
+        {
+            "name": "polymorphic_blending_attack",
+            "option":
+                [
+                    {"name": "artificial", "type": "str", "required": true},
+                    {"name": "attack", "type": "str", "required": true},
+                    {"name": "smoothing_factor", "type": "float", "required": true},
+                    {"name": "threshold", "type": "float", "required": true}
+                ],
+            "mtype": "pcap",
+            "ftype": null
+        }
+    ]
+}

@@ -1,0 +1,11 @@
+{
+    "name": "polymorphic_blending_attack",
+    "num_files": 2,
+    "files": ["artificial.pcap", "attack.pcap"],
+    "option": {
+        "artificial": "artificial.pcap",
+        "attack": "attack.pcap"
+    },
+    "tags": null,
+    "model": null
+}

@@ -1,0 +1,6 @@
+[submodule "polymorphic-blending"]
+	path = polymorphic-blending
+	url = https://github.com/evandowning/polymorphic-blending.git
+[submodule "payl"]
+	path = payl
+	url = https://github.com/evandowning/payl.git

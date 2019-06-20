@@ -1,0 +1,14 @@
+{
+    "name": "payl",
+    "num_files": 2,
+    "files": ["training.zip", "testing.zip"],
+    "option": {
+        "training": "training.zip",
+        "testing": "testing.zip",
+        "type": "HTTP",
+        "smoothing": 3,
+        "threshold": 170
+    },
+    "tags": null,
+    "model": null
+}
