@@ -20,15 +20,28 @@ echo "" > $LOG_ERR
 
 echo "Running $NAME" >> $LOG
 
+# Get number of files passed
+NUM_FILES=$( jq -r ".tags | length" "$CONFIG")
+
 # PAYL
 if [ "$NAME" = "payl" ]; then
     # Get pcap filenames
-    INPUT_FILE=$( jq -r ".files"[0] "$CONFIG" )
-    SAMPLE="$INPUT_FILE"
+    SAMPLE=""
+    if [ $NUM_FILES -gt 0 ]; then
+        for i in `seq 0 $((NUM_FILES-1))`
+        do
+            e=$( jq -r ".tags"[$i].ftype "$CONFIG" )
 
-    TYPE=$( jq -r ".option.type" "$CONFIG" )
-    SMOOTHING=$( jq -r ".option.smoothing_factor" "$CONFIG" )
-    THRESHOLD=$( jq -r ".option.threshold" "$CONFIG" )
+            # If this is a data file
+            if [ "$e" == "data" ]; then
+                SAMPLE=$( jq -r ".files"[$i] "$CONFIG")
+            fi
+        done
+    fi
+
+    TYPE=$( jq -r ".options.type" "$CONFIG" )
+    SMOOTHING=$( jq -r ".options.smoothing_factor" "$CONFIG" )
+    THRESHOLD=$( jq -r ".options.threshold" "$CONFIG" )
 
     mkdir "$INPUT/model/"
 
@@ -89,12 +102,27 @@ fi
 
 # EVALUATE_PAYL
 if [ "$NAME" = "evaluate_payl" ]; then
-    # Get hashes and labels
-    INPUT_FILE=$( jq -r ".files"[0] "$CONFIG" )
-    SAMPLE="$INPUT_FILE"
+    # Get pcap filenames
+    SAMPLE=""
+    MODEL_ZIP=""
+    if [ $NUM_FILES -gt 0 ]; then
+        for i in `seq 0 $((NUM_FILES-1))`
+        do
+            e=$( jq -r ".tags"[$i].ftype "$CONFIG" )
+
+            # If this is a data file
+            if [ "$e" == "data" ]; then
+                SAMPLE=$( jq -r ".files"[$i] "$CONFIG")
+            fi
+
+            # If this is a model file
+            if [ "$e" == "model" ]; then
+                MODEL_ZIP=$( jq -r ".files"[$i] "$CONFIG")
+            fi
+        done
+    fi
 
     # Get model(s)
-    MODEL_ZIP=$( jq -r ".model" "$CONFIG" )
     OLD_NAME=$( zipinfo -1 "$INPUT/$MODEL_ZIP" | head -1 | awk '{split($NF,a,"/");print a[1]}' )
     MODEL="model"
 
@@ -104,8 +132,8 @@ if [ "$NAME" = "evaluate_payl" ]; then
     mv $OLD_NAME $MODEL
     cd /app/
 
-    SMOOTHING=$( jq -r ".option.smoothing_factor" "$CONFIG" )
-    THRESHOLD=$( jq -r ".option.threshold" "$CONFIG" )
+    SMOOTHING=$( jq -r ".options.smoothing_factor" "$CONFIG" )
+    THRESHOLD=$( jq -r ".options.threshold" "$CONFIG" )
 
     FEATURE="network_features.pkl"
 
@@ -140,16 +168,30 @@ if [ "$NAME" = "evaluate_payl" ]; then
 }' > "$OUTPUT/output.json"
 fi
 
+#TODO
 #PBA
 if [ "$NAME" = "polymorphic_blending_attack" ]; then
-    ARTIFICIAL=$( jq -r ".option.artificial" "$CONFIG" )
-    ATTACK=$( jq -r ".option.attack" "$CONFIG" )
+    # Get pcap filenames
+    ARTIFICIAL=$( jq -r ".options.artificial" "$CONFIG" )
+    ATTACK=$( jq -r ".options.attack" "$CONFIG" )
 
-    SMOOTHING=$( jq -r ".option.smoothing_factor" "$CONFIG" )
-    THRESHOLD=$( jq -r ".option.threshold" "$CONFIG" )
+    MODEL_ZIP=""
+    if [ $NUM_FILES -gt 0 ]; then
+        for i in `seq 0 $((NUM_FILES-1))`
+        do
+            e=$( jq -r ".tags"[$i].ftype "$CONFIG" )
+
+            # If this is a model file
+            if [ "$e" == "model" ]; then
+                MODEL_ZIP=$( jq -r ".files"[$i] "$CONFIG")
+            fi
+        done
+    fi
+
+    SMOOTHING=$( jq -r ".options.smoothing_factor" "$CONFIG" )
+    THRESHOLD=$( jq -r ".options.threshold" "$CONFIG" )
 
     # Get model(s)
-    MODEL_ZIP=$( jq -r ".model" "$CONFIG" )
     OLD_NAME=$( zipinfo -1 "$INPUT/$MODEL_ZIP" | head -1 | awk '{split($NF,a,"/");print a[1]}' )
     MODEL="model"
 

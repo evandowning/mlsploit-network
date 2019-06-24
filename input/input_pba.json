@@ -1,11 +1,12 @@
 {
     "name": "polymorphic_blending_attack",
-    "num_files": 2,
-    "files": ["artificial.pcap", "attack.pcap"],
-    "option": {
-        "artificial": "artificial.pcap",
-        "attack": "attack.pcap"
+    "num_files": 1,
+    "files": ["model.zip"],
+    "options": {
+        "artificial": "http_artificial_profile.pcap",
+        "attack": "http_attack.pcap",
+        "smoothing_factor": 0.3,
+        "threshold": 170
     },
-    "tags": null,
-    "model": null
+    "tags": [{"ftype": "model"}]
 }

@@ -1,14 +1,12 @@
 {
-    "name": "payl",
-    "num_files": 2,
-    "files": ["training.zip", "testing-attack.zip"],
-    "option": {
-        "training": "training.zip",
-        "testing": "testing-attack.zip",
-        "type": "HTTP",
-        "smoothing": 3,
+    "name": "polymorphic_blending_attack",
+    "num_files": 1,
+    "files": ["model.zip"],
+    "options": {
+        "artificial": "http_artificial_profile.pcap",
+        "attack": "http_attack.pcap",
+        "smoothing_factor": 0.3,
         "threshold": 170
     },
-    "tags": null,
-    "model": null
+    "tags": [{"ftype": "model"}]
 }

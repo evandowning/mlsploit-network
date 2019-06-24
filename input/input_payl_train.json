@@ -1,0 +1,11 @@
+{
+    "name": "payl",
+    "num_files": 1,
+    "files": ["sample_http.txt"],
+    "options": {
+        "type": "HTTP",
+        "smoothing_factor": 0.3,
+        "threshold": 170
+    },
+    "tags": [{"ftype": "data"}]
+}

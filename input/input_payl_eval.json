@@ -1,0 +1,11 @@
+{
+    "name": "evaluate_payl",
+    "num_files": 2,
+    "files": ["sample_eval.txt","model.zip"],
+    "options": {
+        "type": "HTTP",
+        "smoothing_factor": 0.3,
+        "threshold": 170
+    },
+    "tags": [{"ftype": "data"},{"ftype": "model"}]
+}

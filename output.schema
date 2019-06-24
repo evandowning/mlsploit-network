@@ -2,21 +2,21 @@
     "function": [
         {
             "name": "payl",
-            "option_tags": [
-                {"tag_name": "return_value", "type": "int"}
-            ]
+            "tags": [],
+            "files_modified": false,
+            "files_extra": false
         },
         {
             "name": "evaluate_payl",
-            "option_tags": [
-                {"tag_name": "return_value", "type": "int"}
-            ]
+            "tags": [],
+            "files_modified": false,
+            "files_extra": false
         },
         {
             "name": "polymorphic_blending_attack",
-            "option_tags":[
-                {"tag_name": "return_value", "type": "int"}
-            ]
+            "tags": [],
+            "files_modified": false,
+            "files_extra": false
         }
     ]
 }

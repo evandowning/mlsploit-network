@@ -2,36 +2,52 @@
     "function":[
         {
            "name": "payl",
-            "option":
+            "options":
                 [
                     {"name": "type", "type": "str", "required": true},
                     {"name": "smoothing_factor", "type": "float", "required": true},
                     {"name": "threshold", "type": "float", "required": true}
                 ],
-            "mtype": "pcap",
-            "ftype": null
+            "extensions": [
+                {
+                    "tags": {"ftype": "data"},
+                    "extension": "txt"
+                }
+            ]
         },
         {
            "name": "evaluate_payl",
-            "option":
+            "options":
                 [
                     {"name": "smoothing_factor", "type": "float", "required": true},
                     {"name": "threshold", "type": "float", "required": true}
                 ],
-            "mtype": "pcap",
-            "ftype": null
+            "extensions": [
+                {
+                    "tags": {"ftype": "data"},
+                    "extension": "txt"
+                },
+                {
+                    "tags": {"ftype": "model"},
+                    "extension": "zip"
+                }
+            ]
         },
         {
             "name": "polymorphic_blending_attack",
-            "option":
+            "options":
                 [
                     {"name": "artificial", "type": "str", "required": true},
                     {"name": "attack", "type": "str", "required": true},
                     {"name": "smoothing_factor", "type": "float", "required": true},
                     {"name": "threshold", "type": "float", "required": true}
                 ],
-            "mtype": "pcap",
-            "ftype": null
+            "extensions": [
+                {
+                    "tags": {"ftype": "model"},
+                    "extension": "zip"
+                }
+            ]
         }
     ]
 }
