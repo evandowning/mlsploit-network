@@ -10,7 +10,7 @@
                 ],
             "extensions": [
                 {
-                    "tags": {"ftype": "data"},
+                    "ftype": "data",
                     "extension": "txt"
                 }
             ]
