@@ -8,9 +8,12 @@
                     {"name": "smoothing_factor", "type": "float", "required": true},
                     {"name": "threshold", "type": "float", "required": true}
                 ],
+            "required_input_tags": [
+                "ftype"
+            ],
             "extensions": [
                 {
-                    "ftype": "data",
+                    "tags": {"ftype": "data"},
                     "extension": "txt"
                 }
             ]

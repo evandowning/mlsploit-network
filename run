@@ -39,6 +39,12 @@ if [ "$NAME" = "payl" ]; then
         done
     fi
 
+    # Check input files
+    if [ "$SAMPLE" = "" ]; then
+        echo "Error. Couldn't find input files." >> $LOG_ERR
+        exit 1
+    fi
+
     TYPE=$( jq -r ".options.type" "$CONFIG" )
     SMOOTHING=$( jq -r ".options.smoothing_factor" "$CONFIG" )
     THRESHOLD=$( jq -r ".options.threshold" "$CONFIG" )
@@ -122,6 +128,12 @@ if [ "$NAME" = "evaluate_payl" ]; then
         done
     fi
 
+    # Check input files
+    if [ "$SAMPLE" = "" ] && [ "$MODEL_ZIP" = "" ]; then
+        echo "Error. Couldn't find input files." >> $LOG_ERR
+        exit 1
+    fi
+
     # Get model(s)
     OLD_NAME=$( zipinfo -1 "$INPUT/$MODEL_ZIP" | head -1 | awk '{split($NF,a,"/");print a[1]}' )
     MODEL="model"
@@ -169,7 +181,6 @@ if [ "$NAME" = "evaluate_payl" ]; then
 }' > "$OUTPUT/output.json"
 fi
 
-#TODO
 #PBA
 if [ "$NAME" = "polymorphic_blending_attack" ]; then
     # Get pcap filenames
@@ -187,6 +198,12 @@ if [ "$NAME" = "polymorphic_blending_attack" ]; then
                 MODEL_ZIP=$( jq -r ".files"[$i] "$CONFIG")
             fi
         done
+    fi
+
+    # Check input files
+    if [ "$MODEL_ZIP" = "" ]; then
+        echo "Error. Couldn't find input files." >> $LOG_ERR
+        exit 1
     fi
 
     SMOOTHING=$( jq -r ".options.smoothing_factor" "$CONFIG" )
