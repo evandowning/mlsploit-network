@@ -21,4 +21,7 @@ RUN ./setup.sh
 workdir /app
 ADD ./run /app
 
+# Change permissions
+RUN chown -R 1001:1001 /app/
+
 CMD ["bash","run"]
