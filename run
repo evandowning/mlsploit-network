@@ -16,7 +16,7 @@ function exit_error() {
     "files_etc": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'"]
 }' > "$OUTPUT/output.json"
 
-    exit 1
+    exit 0
 }
 
 set -x
