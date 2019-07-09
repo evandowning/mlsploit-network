@@ -1,4 +1,19 @@
 #!/bin/bash
+
+function exit_error() {
+    # Write output.json
+    echo '{
+    "name": "'"$1"'",
+    "files": [null],
+    "status": [null],
+    "results": [null],
+    "model": null,
+    "files_etc": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'"]
+}' > "$OUTPUT/output.json"
+
+    exit 1
+}
+
 set -x
 
 END="============================================="
@@ -42,7 +57,7 @@ if [ "$NAME" = "payl" ]; then
     # Check input files
     if [ "$SAMPLE" = "" ]; then
         echo "Error. Couldn't find input files." >> $LOG_ERR
-        exit 1
+        exit_error "$NAME"
     fi
 
     TYPE=$( jq -r ".options.type" "$CONFIG" )
@@ -131,7 +146,7 @@ if [ "$NAME" = "evaluate_payl" ]; then
     # Check input files
     if [ "$SAMPLE" = "" ] && [ "$MODEL_ZIP" = "" ]; then
         echo "Error. Couldn't find input files." >> $LOG_ERR
-        exit 1
+        exit_error "$NAME"
     fi
 
     # Get model(s)
@@ -203,7 +218,7 @@ if [ "$NAME" = "polymorphic_blending_attack" ]; then
     # Check input files
     if [ "$MODEL_ZIP" = "" ]; then
         echo "Error. Couldn't find input files." >> $LOG_ERR
-        exit 1
+        exit_error "$NAME"
     fi
 
     SMOOTHING=$( jq -r ".options.smoothing_factor" "$CONFIG" )
@@ -277,3 +292,4 @@ fi
 
 
 echo "Finished: `date +%s`" >> $LOG
+exit 0
