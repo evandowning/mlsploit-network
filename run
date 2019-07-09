@@ -43,9 +43,9 @@ if [ "$NAME" = "payl" ]; then
     SMOOTHING=$( jq -r ".options.smoothing_factor" "$CONFIG" )
     THRESHOLD=$( jq -r ".options.threshold" "$CONFIG" )
 
-    mkdir "$INPUT/model/"
+    mkdir "$OUTPUT/model/"
 
-    MODEL="$INPUT/model/model.pkl"
+    MODEL="$OUTPUT/model/model.pkl"
     FEATURE="network_${TYPE}_features.pkl"
 
     PAYL_CONFIG="/app/payl/payl.cfg"
@@ -85,7 +85,7 @@ if [ "$NAME" = "payl" ]; then
     echo $END >> $LOG
 
     # Compress models and move them to output folder
-    cd "$INPUT"
+    cd "$OUTPUT"
     zip -r "$OUTPUT/model.zip" "./model/"
     cd /app/
 
@@ -128,7 +128,8 @@ if [ "$NAME" = "evaluate_payl" ]; then
 
     # Unzip models
     cd "$INPUT"
-    unzip "$MODEL_ZIP"
+    unzip "$MODEL_ZIP" -d "$OUTPUT"
+    cd "$OUTPUT"
     mv $OLD_NAME $MODEL
     cd /app/
 
@@ -152,7 +153,7 @@ if [ "$NAME" = "evaluate_payl" ]; then
     echo "Evaluating model" >> $LOG
     echo "Evaluating model" >> $LOG_ERR
     echo "Start Timestamp: `date +%s`" >> $LOG
-    python2.7 evaluation.py "$INPUT/$MODEL/model.pkl" "$FEATURE" "$SMOOTHING" "$THRESHOLD" >> $LOG 2>> $LOG_ERR
+    python2.7 evaluation.py "$OUTPUT/$MODEL/model.pkl" "$FEATURE" "$SMOOTHING" "$THRESHOLD" >> $LOG 2>> $LOG_ERR
     echo "End Timestamp: `date +%s`" >> $LOG
     echo $END >> $LOG
     echo $END >> $LOG_ERR
@@ -197,7 +198,8 @@ if [ "$NAME" = "polymorphic_blending_attack" ]; then
 
     # Unzip models
     cd "$INPUT"
-    unzip "$MODEL_ZIP"
+    unzip "$MODEL_ZIP" -d "$OUTPUT"
+    cd "$OUTPUT"
     mv $OLD_NAME $MODEL
     cd /app/
 
@@ -231,7 +233,7 @@ if [ "$NAME" = "polymorphic_blending_attack" ]; then
     echo "Evaluating model on blended attack" >> $LOG
     echo "Evaluating model on blended attack" >> $LOG_ERR
     echo "Start Timestamp: `date +%s`" >> $LOG
-    python2.7 evaluation.py "$INPUT/$MODEL/model.pkl" "$FEATURE" "$SMOOTHING" "$THRESHOLD" >> $LOG 2>> $LOG_ERR
+    python2.7 evaluation.py "$OUTPUT/$MODEL/model.pkl" "$FEATURE" "$SMOOTHING" "$THRESHOLD" >> $LOG 2>> $LOG_ERR
     echo "End Timestamp: `date +%s`" >> $LOG
     echo $END >> $LOG
     echo $END >> $LOG_ERR
@@ -239,10 +241,10 @@ if [ "$NAME" = "polymorphic_blending_attack" ]; then
     echo $END >> $LOG
 
     # Compress blended feature and move to output folder
-    cd "$INPUT"
+    cd "$OUTPUT"
     mkdir "./features"
     mv "$FEATURE" "./features/"
-    zip -r "$OUTPUT/features.zip" "./features/"
+    zip -r "features.zip" "./features/"
     cd /app/
 
     # Write output.json
