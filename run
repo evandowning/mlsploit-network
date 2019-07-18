@@ -9,7 +9,7 @@ function exit_error() {
     # Write output.json
     echo '{
     "name": "'"$NAME"'",
-    "files": [null],
+    "files": ["'"$LOG_NAME"'"],
     "status": [null],
     "results": [null],
     "model": null,
