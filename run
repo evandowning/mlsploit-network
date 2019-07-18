@@ -13,6 +13,7 @@ function exit_error() {
     "status": [null],
     "results": [null],
     "model": null,
+    "tags": [null],
     "files_etc": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'"]
 }' > "$OUTPUT/output.json"
 
@@ -122,6 +123,7 @@ if [ "$NAME" = "payl" ]; then
     "status": [null],
     "results": [null],
     "model": "model.zip",
+    "tags": [null],
     "files_etc": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","model.zip"]
 }' > "$OUTPUT/output.json"
 fi
@@ -197,6 +199,7 @@ if [ "$NAME" = "evaluate_payl" ]; then
     "status": [null],
     "results": [null],
     "model": null,
+    "tags": [null],
     "files_etc": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'"]
 }' > "$OUTPUT/output.json"
 fi
@@ -291,6 +294,7 @@ if [ "$NAME" = "polymorphic_blending_attack" ]; then
     "status": [null],
     "results": [null],
     "model": null,
+    "tags": [null],
     "files_etc": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","features.zip"]
 }' > "$OUTPUT/output.json"
 fi
