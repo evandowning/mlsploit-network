@@ -4,7 +4,7 @@
             "name": "payl",
             "tags": [],
             "files_modified": false,
-            "files_extra": false
+            "files_extra": true
         },
         {
             "name": "evaluate_payl",
@@ -16,7 +16,7 @@
             "name": "polymorphic_blending_attack",
             "tags": [],
             "files_modified": false,
-            "files_extra": false
+            "files_extra": true
         }
     ]
 }

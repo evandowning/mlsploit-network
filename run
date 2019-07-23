@@ -116,13 +116,11 @@ if [ "$NAME" = "payl" ]; then
 
     # Write output.json
     echo '{
-    "name": "payl",
-    "files": [null],
-    "status": [null],
-    "results": [null],
-    "model": "model.zip",
+    "name": "'"$NAME"'",
+    "files": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","model.zip"],
     "tags": [null],
-    "files_etc": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","model.zip"]
+    "files_extra": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","model.zip"],
+    "files_modified": [null]
 }' > "$OUTPUT/output.json"
 fi
 
@@ -192,13 +190,11 @@ if [ "$NAME" = "evaluate_payl" ]; then
 
     # Write output.json
     echo '{
-    "name": "evaluate_payl",
-    "files": [null],
-    "status": [null],
-    "results": [null],
-    "model": null,
+    "name": "'"$NAME"'",
+    "files": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'"],
     "tags": [null],
-    "files_etc": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'"]
+    "files_extra": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'"],
+    "files_modified": [null]
 }' > "$OUTPUT/output.json"
 fi
 
@@ -287,13 +283,11 @@ if [ "$NAME" = "polymorphic_blending_attack" ]; then
 
     # Write output.json
     echo '{
-    "name": "polymorphic_blending_attack",
-    "files": [null],
-    "status": [null],
-    "results": [null],
-    "model": null,
+    "name": "'"$NAME"'",
+    "files": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","features.zip"],
     "tags": [null],
-    "files_etc": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","features.zip"]
+    "files_extra": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","features.zip"],
+    "files_modified": [null]
 }' > "$OUTPUT/output.json"
 fi
 
