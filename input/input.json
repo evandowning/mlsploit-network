@@ -1,12 +1,11 @@
 {
-    "name": "polymorphic_blending_attack",
+    "name": "payl",
     "num_files": 1,
-    "files": ["model.zip"],
+    "files": ["sample_http.txt"],
     "options": {
-        "artificial": "http_artificial_profile.pcap",
-        "attack": "http_attack.pcap",
+        "type": "HTTP",
         "smoothing_factor": 0.3,
         "threshold": 170
     },
-    "tags": [{"ftype": "model"}]
+    "tags": [{"ftype": "data"}]
 }
