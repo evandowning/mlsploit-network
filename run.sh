@@ -53,7 +53,7 @@ if [ "$NAME" = "payl" ]; then
             e=$( jq -r ".tags"[$i].ftype "$CONFIG" )
 
             # If this is a data file
-            if [ "$e" == "data" ]; then
+            if [ "$e" == "payl_data" ]; then
                 SAMPLE=$( jq -r ".files"[$i] "$CONFIG")
             fi
 
@@ -141,7 +141,7 @@ if [ "$NAME" = "evaluate_payl" ]; then
             e=$( jq -r ".tags"[$i].ftype "$CONFIG" )
 
             # If this is a data file
-            if [ "$e" == "data" ]; then
+            if [ "$e" == "eval_data" ]; then
                 SAMPLE=$( jq -r ".files"[$i] "$CONFIG")
             fi
 
