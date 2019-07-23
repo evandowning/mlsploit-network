@@ -10,7 +10,7 @@ function exit_error() {
     echo '{
     "name": "'"$NAME"'",
     "files": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'"],
-    "tags": [null],
+    "tags": [{"ftype":"log"},{"ftype":"log"}],
     "files_extra": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'"],
     "files_modified": [null]
 }' > "$OUTPUT/output.json"
@@ -118,7 +118,7 @@ if [ "$NAME" = "payl" ]; then
     echo '{
     "name": "'"$NAME"'",
     "files": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","model.zip"],
-    "tags": [null],
+    "tags": [{"ftype":"log"},{"ftype":"log"},{"ftype":"model"}],
     "files_extra": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","model.zip"],
     "files_modified": [null]
 }' > "$OUTPUT/output.json"
@@ -192,7 +192,7 @@ if [ "$NAME" = "evaluate_payl" ]; then
     echo '{
     "name": "'"$NAME"'",
     "files": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'"],
-    "tags": [null],
+    "tags": [{"ftype":"log"},{"ftype":"log"}],
     "files_extra": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'"],
     "files_modified": [null]
 }' > "$OUTPUT/output.json"
@@ -285,7 +285,7 @@ if [ "$NAME" = "polymorphic_blending_attack" ]; then
     echo '{
     "name": "'"$NAME"'",
     "files": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","features.zip"],
-    "tags": [null],
+    "tags": [{"ftype":"log"},{"ftype":"log"},{"ftype":"feature"}],
     "files_extra": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","features.zip"],
     "files_modified": [null]
 }' > "$OUTPUT/output.json"
