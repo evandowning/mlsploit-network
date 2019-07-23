@@ -19,7 +19,7 @@ RUN ./setup.sh
 
 # Add run (for Docker)
 workdir /app
-ADD ./run /app
+ADD ./run.sh /app
 
 # Change permissions
 RUN chown -R 1001:1001 /app/
