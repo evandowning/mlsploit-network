@@ -26,13 +26,13 @@ INPUT="/mnt/input"
 OUTPUT="/mnt/output"
 RAW="/mnt/malwarelab/pcap"
 
+NAME=$( jq -r ".name" "$CONFIG" )
+
 CONFIG="$INPUT/input.json"
-LOG_NAME="network-log.txt"
-LOG_ERR_NAME="network-log-err.txt"
+LOG_NAME="network-${NAME}-log.txt"
+LOG_ERR_NAME="network-${NAME}-log-err.txt"
 LOG="$OUTPUT/$LOG_NAME"
 LOG_ERR="$OUTPUT/$LOG_ERR_NAME"
-
-NAME=$( jq -r ".name" "$CONFIG" )
 
 echo "Started: `date +%s`" > $LOG
 echo "" > $LOG_ERR
@@ -53,7 +53,7 @@ if [ "$NAME" = "payl" ]; then
             e=$( jq -r ".tags"[$i].ftype "$CONFIG" )
 
             # If this is a data file
-            if [ "$e" == "payl_data" ]; then
+            if [ "$e" == "data_train" ]; then
                 SAMPLE=$( jq -r ".files"[$i] "$CONFIG")
             fi
 
@@ -141,7 +141,7 @@ if [ "$NAME" = "evaluate_payl" ]; then
             e=$( jq -r ".tags"[$i].ftype "$CONFIG" )
 
             # If this is a data file
-            if [ "$e" == "eval_data" ]; then
+            if [ "$e" == "data_eval" ]; then
                 SAMPLE=$( jq -r ".files"[$i] "$CONFIG")
             fi
 
