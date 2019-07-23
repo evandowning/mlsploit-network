@@ -15,6 +15,10 @@
                 {
                     "tags": {"ftype": "data"},
                     "extension": "txt"
+                },
+                {
+                    "tags": {"ftype": "model"},
+                    "extension": "zip"
                 }
             ]
         },
@@ -25,6 +29,9 @@
                     {"name": "smoothing_factor", "type": "float", "required": true},
                     {"name": "threshold", "type": "float", "required": true}
                 ],
+            "required_input_tags": [
+                "ftype"
+            ],
             "extensions": [
                 {
                     "tags": {"ftype": "data"},
@@ -45,6 +52,9 @@
                     {"name": "smoothing_factor", "type": "float", "required": true},
                     {"name": "threshold", "type": "float", "required": true}
                 ],
+            "required_input_tags": [
+                "ftype"
+            ],
             "extensions": [
                 {
                     "tags": {"ftype": "model"},

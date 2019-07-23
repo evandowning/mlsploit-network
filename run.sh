@@ -46,6 +46,7 @@ NUM_FILES=$( jq -r ".tags | length" "$CONFIG")
 if [ "$NAME" = "payl" ]; then
     # Get pcap filenames
     SAMPLE=""
+    MODEL_ZIP=""
     if [ $NUM_FILES -gt 0 ]; then
         for i in `seq 0 $((NUM_FILES-1))`
         do
@@ -55,11 +56,16 @@ if [ "$NAME" = "payl" ]; then
             if [ "$e" == "data" ]; then
                 SAMPLE=$( jq -r ".files"[$i] "$CONFIG")
             fi
+
+            # If this is a model file
+            if [ "$e" == "model" ]; then
+                MODEL_ZIP=$( jq -r ".files"[$i] "$CONFIG")
+            fi
         done
     fi
 
     # Check input files
-    if [ "$SAMPLE" = "" ]; then
+    if [ "$SAMPLE" = "" ] || [ "$MODEL_ZIP" = "" ]; then
         echo "Error. Couldn't find input files." >> $LOG_ERR
         exit_error "$NAME" "$LOG_NAME" "$LOG_ERR_NAME" "$OUTPUT"
     fi
@@ -111,16 +117,16 @@ if [ "$NAME" = "payl" ]; then
 
     # Compress models and move them to output folder
     cd "$OUTPUT"
-    zip -r "$OUTPUT/model.zip" "./model/"
+    zip -r "$OUTPUT/$MODEL_ZIP" "./model/"
     cd /app/
 
     # Write output.json
     echo '{
     "name": "'"$NAME"'",
-    "files": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","model.zip"],
+    "files": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","'"$MODEL_ZIP"'"],
     "tags": [{"ftype":"log"},{"ftype":"log"},{"ftype":"model"}],
-    "files_extra": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","model.zip"],
-    "files_modified": [null]
+    "files_extra": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'"],
+    "files_modified": ["'"$MODEL_ZIP"'"]
 }' > "$OUTPUT/output.json"
 fi
 
