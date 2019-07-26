@@ -26,9 +26,9 @@ INPUT="/mnt/input"
 OUTPUT="/mnt/output"
 RAW="/mnt/malwarelab/pcap"
 
+CONFIG="$INPUT/input.json"
 NAME=$( jq -r ".name" "$CONFIG" )
 
-CONFIG="$INPUT/input.json"
 LOG_NAME="network-${NAME}-log.txt"
 LOG_ERR_NAME="network-${NAME}-log-err.txt"
 LOG="$OUTPUT/$LOG_NAME"
