@@ -119,8 +119,8 @@ if [ "$NAME" = "payl" ]; then
     "name": "'"$NAME"'",
     "files": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","model.zip"],
     "tags": [{"ftype":"log"},{"ftype":"log"},{"ftype":"model"}],
-    "files_extra": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'"],
-    "files_modified": ["'"$MODEL_ZIP"'"]
+    "files_extra": ["'"$LOG_NAME"'","'"$LOG_ERR_NAME"'","model.zip"],
+    "files_modified": [null]
 }' > "$OUTPUT/output.json"
 fi
 
