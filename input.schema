@@ -4,7 +4,7 @@
            "name": "payl",
             "options":
                 [
-                    {"name": "type", "type": "str", "required": true},
+                    {"name": "type", "type": "enum", "values": ["HTTP","DNS"], "required": true},
                     {"name": "smoothing_factor", "type": "float", "required": true},
                     {"name": "threshold", "type": "float", "required": true}
                 ],
